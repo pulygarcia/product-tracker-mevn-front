@@ -3,7 +3,7 @@
 </script>
 
 <template>
-  <main class="pa-3">
+  <main class="pa-3 w-100">
     <h1 class="mt-3">Control Panel</h1>
   </main>
 </template>
