@@ -32,9 +32,6 @@
           Brand
         </th>
         <th class="text-left text-indigo-darken-2 font-weight-bold text-subtitle-1">
-          Image
-        </th>
-        <th class="text-left text-indigo-darken-2 font-weight-bold text-subtitle-1">
           Price
         </th>
         <th class="text-left text-indigo-darken-2 font-weight-bold text-subtitle-1">
@@ -55,9 +52,6 @@
       >
         <td>{{ product.name }}</td>
         <td>{{ product.brand }}</td>
-        <td>
-          <img :src="product.image" :alt="product.name" width="80px">
-        </td>
         <td class="font-weight-bold">US{{ formatCurrency(product.price) }}</td>
         <td>{{ product.quantity }}</td>
         <td>{{ product._id }}</td>

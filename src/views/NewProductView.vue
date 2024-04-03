@@ -7,7 +7,7 @@
     name: '',
     brand: '',
     price: '',
-    image: '',
+    category: '',
     quantity: '',
   });
 
@@ -30,6 +30,31 @@
 
       return;
     }
+    try {
+      await apiServices.addNewProduct(formData.value);
+      alert.value.title = 'Success';
+      alert.value.message = 'Product added successfully';
+      alert.value.type = 'success';
+      setTimeout(() => {
+          alert.value.title = '';
+          alert.value.message = '';
+          alert.value.type = '';
+      }, 3000);
+
+      //reset form
+      formData.value = {};
+
+    } catch (error) {
+      alert.value.title = 'Error';
+      alert.value.message = 'Failed to add product';
+      alert.value.type = 'error';
+
+      setTimeout(() => {
+          alert.value.title = '';
+          alert.value.message = '';
+          alert.value.type = '';
+      }, 3000);
+    }
   }
 </script>
 
@@ -46,7 +71,7 @@
         class="my-5"
       />
 
-      <v-form @submit.prevent @submit="addNewProduct" class="mt-6">
+      <v-form @submit.prevent="addNewProduct(formData)" class="mt-6">
         <v-row>
           <v-col
             cols="12"
@@ -75,9 +100,8 @@
             md="4"
           >
             <v-text-field
-              v-model="formData.image"
-              label="Image"
-              type="File"
+              v-model="formData.price"
+              label="Price"
               required
             ></v-text-field>
           </v-col>
@@ -87,8 +111,8 @@
             md="4"
           >
             <v-text-field
-              v-model="formData.price"
-              label="Price"
+              v-model="formData.category"
+              label="Category"
               required
             ></v-text-field>
           </v-col>
