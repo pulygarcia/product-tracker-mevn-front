@@ -67,4 +67,3 @@
   </v-table>
   </main>
 </template>
-../api/apiServices.js
