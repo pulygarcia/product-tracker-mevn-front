@@ -2,18 +2,9 @@
   import apiServices from '../api/apiServices.js';
   import {onMounted, ref} from 'vue';
   import {formatCurrency} from '../helpers/index.js'
+  import { useProductsStore } from '@/stores/productsStore';
 
-  const products = ref([]);
-
-  onMounted(async () => {
-    try {
-      const {data} = await apiServices.getAllProducts();
-      //console.log(data);
-      products.value = data;
-    } catch (error) {
-      console.log(error);
-    }
-  })
+  const productsStore = useProductsStore();
 
 </script>
 
@@ -35,27 +26,34 @@
           Price
         </th>
         <th class="text-left text-indigo-darken-2 font-weight-bold text-subtitle-1">
+          Category
+        </th>
+        <th class="text-left text-indigo-darken-2 font-weight-bold text-subtitle-1">
           Quantity
         </th>
         <th class="text-left text-indigo-darken-2 font-weight-bold text-subtitle-1">
           ID
         </th>
-        <th class="text-left text-indigo-darken-2 font-weight-bold text-subtitle-1">
-          Category
-        </th>
       </tr>
     </thead>
     <tbody>
       <tr
-        v-for="product in products"
+        v-for="product in productsStore.products"
         :key="product._id"
       >
         <td>{{ product.name }}</td>
         <td>{{ product.brand }}</td>
-        <td class="font-weight-bold">US{{ formatCurrency(product.price) }}</td>
-        <td>{{ product.quantity }}</td>
-        <td>{{ product._id }}</td>
+        <td>US<span class="font-weight-bold">{{ formatCurrency(product.price) }}</span></td>
+
         <td>{{ product.category }}</td>
+
+        <td
+          :class="product.quantity <= 0 ? 'bg-red-darken-1 text-center font-weight-bold' : ''"
+        >
+        {{ product.quantity <= 0 ? 'Not available' : product.quantity }}
+        </td>
+        
+        <td>{{ product._id }}</td>
       </tr>
     </tbody>
   </v-table>

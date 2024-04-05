@@ -1,11 +1,13 @@
 <script setup>
-    import {RouterLink} from 'vue-router'
+    import {RouterLink, useRoute} from 'vue-router'
+
+    const route = useRoute();
 </script>
 
 <template>
-  <v-card class="md-w-25 bg-indigo-darken-2 rounded-0 pa-3">
+  <v-card class="md-w-25 bg-indigo-darken-2 rounded-0 pa-3" :class="route.path == '/control' ? 'bg-grey-darken-4' : ''">
     <span class="text-blue-grey-lighten-2 mt-3 text-subtitle-2">Made by Puly</span>
-      <h1 class="text-h5 font-weight-bold py-1">Product Tracker App</h1>
+      <h1 class="text-h5 font-weight-bold py-1">{{route.path == '/control' ? 'Control Panel' : 'Product Tracker app'}}</h1>
       <v-divider></v-divider>
 
       <div class="d-flex flex-column mt-6 ga-4">
