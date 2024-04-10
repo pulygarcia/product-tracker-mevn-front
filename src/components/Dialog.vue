@@ -1,13 +1,12 @@
 <script setup>
-    import { ref } from 'vue';
+    import { useRouter } from 'vue-router';
     import { formatCurrency } from '@/helpers';
     import {useProductsStore} from '../stores/productsStore'
-    import apiServices from '@/api/apiServices';
-    import Alert from './Alert.vue';
-    import { useRouter } from 'vue-router';
+    import { useDialogStore } from '@/stores/dialogStore';
 
-    const router = useRouter();
     const productsStore = useProductsStore();
+    const dialogStore = useDialogStore();
+    const router = useRouter();
 
     const {isOpen, product} = defineProps({
         isOpen:{
@@ -18,71 +17,47 @@
         },
     })
 
-    const alert = ref({
-        title: '',
-        message: '',
-        type: '',
-        active: false
-    })
-
-    const isDeleted = ref(false);
-
     const deleteProduct = async (id) => {
-        if(confirm('The product will be deleted, are you sure?')){
-            try {
-                await apiServices.deleteProduct(id);
-    
-                alert.value.title = 'Success';
-                alert.value.message = 'Product deleted successfully';
-                alert.value.type = 'success';
-                alert.value.active = true;
-    
-                isDeleted.value = true;
+        try {
+            await productsStore.deleteProduct(id);
 
-                //refresh list
-                const {data} = await apiServices.getAllProducts();
-                productsStore.products = data;
-    
-                setTimeout(() => {
-                    alert.value.title = '';
-                    alert.value.message = '';
-                    alert.value.type = '';
-                    alert.value.active = false;
-                }, 3000);
-            } catch (error) {
-                console.log(error);
-            }
+            dialogStore.isOpenDialog = false;
+
+        } catch (error) {
+            console.log(error);
         }
     }
 </script>
 
 <template>
-    <Alert v-if="alert.active" :title="alert.title" :message="alert.message" :type="alert.type" class="my-5"/>
-
-    <v-card 
-        :title="product.name" 
+    <v-card
         position="absolute"
         min-width="350"
         location="center"
-        class="bg-grey-lighten-3"
-        :class="isOpen == false || isDeleted == true ? 'd-none' : ''"
+        class="bg-grey-darken-4 pa-2 w-md-30"
+        elevation="15"
+        :class="isOpen == false ? 'd-none' : ''"
     >
         <v-card-text>
-            <p class="mt-2">Brand: {{ product.brand }}</p>
-            <p class="mt-2">Category: {{ product.category }}</p>
-            <p class="mt-2">Price: {{ formatCurrency(product.price) }}</p>
-            <p class="mt-2">Stock: {{ product.quantity }}</p>
-            <p class="mt-2">ID: {{ product._id }}</p>
+            <p class="my-2 text-uppercase font-weight-bold text-h5">{{ product.name }}</p>
+            <p class="mt-3 text-blue-darken-2 font-weight-black text-h6">USD{{ formatCurrency(product.price) }}</p>
+            <p class="mt-3 text-subtitle-1">Brand: {{ product.brand }}</p>
+            <p class="mt-3 text-subtitle-1">Category: {{ product.category }}</p>
+
+            <p class="mt-3 text-subtitle-1">Stock: <span :class="product.quantity > 1 ? 'text-green-darken-1' : 'text-red-darken-1'" class="font-weight-bold">{{ product.quantity }}</span></p>
+
+            <p class="mt-3 text-subtitle-1">ID: {{ product._id }}</p>
         </v-card-text>
     
         <v-card-actions>
             <v-spacer></v-spacer>
     
-            <div class="d-flex justify-space-between w-100">
+            <div class="d-flex justify-space-between w-100 mt-3">
                 <div>
                     <v-btn
                         text="Edit"
                         class="bg-blue-darken-2"
+                        @click="router.push({name: 'update-product', params:{id: product._id}})"
                     ></v-btn>
                     <v-btn
                         text="Delete"
@@ -93,7 +68,7 @@
                 
                 <v-btn
                 text="Close"
-                @click="isOpen = false"
+                @click="dialogStore.isOpenDialog = false"
                 variant="outlined"
                 ></v-btn>
             </div>
@@ -101,3 +76,11 @@
         </v-card-actions>
         </v-card>
 </template>
+
+<style>
+@media (min-width: 768px){
+    .w-md-30{
+        width: 30rem;
+    }
+}
+</style>

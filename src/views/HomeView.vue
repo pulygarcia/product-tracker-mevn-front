@@ -1,6 +1,5 @@
 <script setup>
-  import apiServices from '../api/apiServices.js';
-  import {onMounted, ref} from 'vue';
+  import { onMounted } from 'vue';
   import {formatCurrency} from '../helpers/index.js'
   import { useProductsStore } from '@/stores/productsStore';
 
@@ -12,6 +11,14 @@
 
   <main class="pa-3 w-100">
     <h1 class="mt-3">Products</h1>
+
+    <div class="mt-5 w-50">
+          <v-select
+            label="Filter by category"
+            :items="productsStore.categories"
+            v-model="productsStore.selectedCategory"
+          ></v-select>
+    </div>
 
     <v-table class="mt-6">
     <thead>

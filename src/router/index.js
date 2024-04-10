@@ -18,6 +18,11 @@ const router = createRouter({
       path: '/control',
       name: 'control-panel',
       component: () => import('../views/ControlPanelView.vue')
+    },
+    {
+      path: '/update/:id',
+      name: 'update-product',
+      component: () => import('../views/UpdateProductView.vue')
     }
   ]
 })

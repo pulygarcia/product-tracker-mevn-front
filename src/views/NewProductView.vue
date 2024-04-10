@@ -1,10 +1,9 @@
 <script setup>
   import {ref} from 'vue';
-  import apiServices from '@/api/apiServices';
+  import { useProductsStore } from '@/stores/productsStore';
   import Alert from '../components/Alert.vue'
-  import { useRouter } from 'vue-router';
 
-  const router = useRouter();
+  const productsStore = useProductsStore();
 
   const formData = ref({
     name: '',
@@ -14,74 +13,15 @@
     quantity: '',
   });
 
-  const alert = ref({
-    title: '',
-    message: '',
-    type: '',
-    active: false
-  })
-
   const addNewProduct = async () => {
-    //validate fields
-    if(Object.values(formData.value).includes('')){
-      alert.value.title = 'Empty fields';
-      alert.value.message = 'Please complete the fields correctly'
-      alert.value.type = 'error'
-      alert.value.active = true;
-      setTimeout(() => {
-        alert.value.title = '';
-        alert.value.message = '';
-        alert.value.type = '';
-        alert.value.active = false;
-      }, 3000);
-
-      return;
-    }
-    //check if price and quantity are >= 1 as minimun
-    if(formData.value.price <= 0 || formData.value.quantity <= 0){
-      alert.value.title = 'Check values';
-      alert.value.message = 'Please complete the fields with valid data'
-      alert.value.type = 'error'
-      alert.value.active = true;
-      setTimeout(() => {
-        alert.value.title = '';
-        alert.value.message = '';
-        alert.value.type = '';
-        alert.value.active = false;
-      }, 3000);
-
-      return;
-    }
-
     try {
-      await apiServices.addNewProduct(formData.value);
-      alert.value.title = 'Success';
-      alert.value.message = 'Product added successfully';
-      alert.value.type = 'success';
-      alert.value.active = true;
-      setTimeout(() => {
-        alert.value.title = '';
-        alert.value.message = '';
-        alert.value.type = '';
-        alert.value.active = false;
-        router.push({name: 'home'});
-      }, 3000);
-      
+      await productsStore.addNewProduct(formData.value);
+
       //reset form
       formData.value = {};
 
     } catch (error) {
-      alert.value.title = 'Error';
-      alert.value.message = 'Failed to add product';
-      alert.value.type = 'error';
-      alert.value.active = true;
-
-      setTimeout(() => {
-          alert.value.title = '';
-          alert.value.message = '';
-          alert.value.type = '';
-          alert.value.active = false;
-      }, 3000);
+      console.log(error);
     }
   }
 </script>
@@ -92,10 +32,10 @@
       <h1 class="mt-3">Add new Product</h1>
 
       <Alert 
-        v-if="alert.active"
-        :title="alert.title"
-        :message="alert.message"
-        :type="alert.type"
+        v-if="productsStore.alert.active"
+        :title="productsStore.alert.title"
+        :message="productsStore.alert.message"
+        :type="productsStore.alert.type"
         class="my-5"
       />
 
