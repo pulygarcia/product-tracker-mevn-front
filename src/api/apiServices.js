@@ -10,6 +10,9 @@ export default{
     addNewProduct(product){
         return api.post('/products', product)
     },
+    updateProduct(productId, data){
+        return api.put(`/products/${productId}`, data)
+    },
     deleteProduct(productId){
         return api.delete(`/products/${productId}`)
     }

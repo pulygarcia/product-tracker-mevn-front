@@ -79,11 +79,11 @@
             cols="12"
             md="4"
           >
-            <v-text-field
-              v-model="formData.category"
+            <v-select
               label="Category"
-              required
-            ></v-text-field>
+              :items="productsStore.categories"
+              v-model="formData.category"
+            ></v-select>
           </v-col>
 
           <v-col
