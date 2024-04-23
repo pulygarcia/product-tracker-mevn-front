@@ -29,7 +29,7 @@
             </v-btn>
         </RouterLink>
         
-        <RouterLink v-if="route.path == '/' || route.path == '/login'" :to="{name: 'control-panel'}" class="text-decoration-none">
+        <RouterLink v-if="route.path !== '/control'" :to="{name: 'control-panel'}" class="text-decoration-none">
             <v-btn class="d-flex font-weight-bold text-white w-100" :class="route.path == '/control' ? 'bg-red-lighten-1' : 'bg-indigo-lighten-1'">
               <span>Control</span>
               <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" width="20px" class="ms-1">
@@ -38,7 +38,11 @@
             </v-btn>
         </RouterLink>
 
-        <RouterLink v-if="route.path == '/'" :to="{name: 'login'}" class="text-decoration-none">
+        <RouterLink 
+          v-if="route.path == '/' || route.path == '/login'" 
+          :to="{name: 'login'}" 
+          class="text-decoration-none"
+        >
             <v-btn class="d-flex  font-weight-bold text-white w-100" :class="route.path == '/control' ? 'bg-red-lighten-1' : 'bg-indigo-lighten-1'">
               <span>Login</span>
               <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" width="20px" class="ms-1">

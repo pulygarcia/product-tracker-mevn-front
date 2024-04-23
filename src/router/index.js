@@ -22,6 +22,9 @@ const router = createRouter({
     {
       path: '/control',
       name: 'control-panel',
+      meta:{
+        requiresAuth: true
+      },
       component: () => import('../views/ControlPanelView.vue')
     },
     {
@@ -30,6 +33,22 @@ const router = createRouter({
       component: () => import('../views/UpdateProductView.vue')
     }
   ]
+})
+
+//navigation guard
+router.beforeEach((to, from, next) => {
+  if(to.meta.requiresAuth){
+    //check if there is something
+    const user = localStorage.getItem('user');
+    if(!user){
+      next({name: 'login'})
+    }else{
+      next();
+    }
+  }else{
+    //allow navigation
+    next();
+  }
 })
 
 export default router
