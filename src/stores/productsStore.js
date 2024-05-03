@@ -2,20 +2,17 @@ import {ref, onMounted, watch} from 'vue';
 import { useRouter } from 'vue-router';
 import {defineStore} from 'pinia';
 import apiServices from '../api/apiServices';
+import { useAlertStore } from './alertStore';
 
 export const useProductsStore = defineStore('products', () => {
 
     const router = useRouter();
+    const alertStore = useAlertStore();
+
     const products = ref([]);
     const categories = ref(['Hardware', 'Peripherals', 'Others', 'All']);
     const selectedCategory = ref('All');
     const allProducts = ref([]);
-    const alert = ref({
-        title: '',
-        message: '',
-        type: '',
-        active: false
-    })
 
     onMounted( async() => {
         try {
@@ -43,15 +40,15 @@ export const useProductsStore = defineStore('products', () => {
     const addNewProduct = async (product) => {
         //validate fields
         if(Object.values(product).includes('')){
-            alert.value.title = 'Empty fields';
-            alert.value.message = 'Please complete the fields correctly'
-            alert.value.type = 'error'
-            alert.value.active = true;
+            alertStore.alert.title = 'Empty fields';
+            alertStore.alert.message = 'Please complete the fields correctly'
+            alertStore.alert.type = 'error'
+            alertStore.alert.active = true;
             setTimeout(() => {
-                alert.value.title = '';
-                alert.value.message = '';
-                alert.value.type = '';
-                alert.value.active = false;
+                alertStore.alert.title = '';
+                alertStore.alert.message = '';
+                alertStore.alert.type = '';
+                alertStore.alert.active = false;
             }, 3000);
 
           return;
@@ -59,15 +56,15 @@ export const useProductsStore = defineStore('products', () => {
 
         //check if price and quantity are >= 1 as minimun
         if(product.price <= 0 || product.quantity <= 0){
-            alert.value.title = 'Check values';
-            alert.value.message = 'Please complete the fields with valid data'
-            alert.value.type = 'error'
-            alert.value.active = true;
+            alertStore.alert.title = 'Checks';
+            alertStore.alert.message = 'Please complete the fields with valid data'
+            alertStore.alert.type = 'error'
+            alertStore.alert.active = true;
             setTimeout(() => {
-            alert.value.title = '';
-            alert.value.message = '';
-            alert.value.type = '';
-            alert.value.active = false;
+            alertStore.alert.title = '';
+            alertStore.alert.message = '';
+            alertStore.alert.type = '';
+            alertStore.alert.active = false;
             }, 3000);
     
             return;
@@ -75,20 +72,20 @@ export const useProductsStore = defineStore('products', () => {
     
         try {
             await apiServices.addNewProduct(product);
-            alert.value.title = 'Success';
-            alert.value.message = 'Product added successfully';
-            alert.value.type = 'success';
-            alert.value.active = true;
+            alertStore.alert.title = 'Success';
+            alertStore.alert.message = 'Product added successfully';
+            alertStore.alert.type = 'success';
+            alertStore.alert.active = true;
 
             //update list
             const {data} = await apiServices.getAllProducts()
             products.value = data;
 
             setTimeout(() => {
-                alert.value.title = '';
-                alert.value.message = '';
-                alert.value.type = '';
-                alert.value.active = false;
+                alertStore.alert.title = '';
+                alertStore.alert.message = '';
+                alertStore.alert.type = '';
+                alertStore.alert.active = false;
                 router.push({name: 'home'});
             }, 3000);
     
@@ -102,16 +99,16 @@ export const useProductsStore = defineStore('products', () => {
             try {
                 await apiServices.deleteProduct(id);
 
-                alert.value.title = 'Success';
-                alert.value.message = 'The product has been deleted';
-                alert.value.type = 'success';
-                alert.value.active = true;
+                alertStore.alert.title = 'Success';
+                alertStore.alert.message = 'The product has been deleted';
+                alertStore.alert.type = 'success';
+                alertStore.alert.active = true;
 
                 setTimeout(() => {
-                    alert.value.title = '';
-                    alert.value.message = '';
-                    alert.value.type = '';
-                    alert.value.active = false;
+                    alertStore.alert.title = '';
+                    alertStore.alert.message = '';
+                    alertStore.alert.type = '';
+                    alertStore.alert.active = false;
                 }, 3000);
 
                 //refresh list
@@ -129,7 +126,6 @@ export const useProductsStore = defineStore('products', () => {
         products,
         allProducts,
         categories,
-        alert,
         selectedCategory,
         addNewProduct,
         deleteProduct,

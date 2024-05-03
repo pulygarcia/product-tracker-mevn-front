@@ -1,12 +1,12 @@
-import {ref} from 'vue';
 import {useRouter} from 'vue-router'
 import {defineStore} from 'pinia';
-import { useProductsStore } from './productsStore';
+import { useAlertStore } from './alertStore';
+import authServices from '@/api/authServices';
 
 
 export const useAuthStore = defineStore('auth', () => {
     const router = useRouter();
-    const productsStore = useProductsStore();
+    const alertStore = useAlertStore();
 
     const validateEmail = (email) => {
         const regex = /\S+@\S+\.\S+/;
@@ -15,21 +15,31 @@ export const useAuthStore = defineStore('auth', () => {
 
     const login = (formData) => {
         if(Object.values(formData).includes('')){
-          console.log('complete the fields');
+          alertStore.alert.active = true;
+          alertStore.alert.title = 'Complete the fields';
+          alertStore.alert.message = 'Please fill the fields with valid data';
+          alertStore.alert.type = 'error';
+
+          setTimeout(() => {
+            alertStore.alert.active = false;
+            alertStore.alert.title = '';
+            alertStore.alert.message = '';
+            alertStore.alert.type = '';
+          }, 3000);
           return;
         }
   
         if(!validateEmail(formData.email)){
-          productsStore.alert.active = true;
-          productsStore.alert.title = 'Invalid Email';
-          productsStore.alert.message = 'Please enter a valid Email';
-          productsStore.alert.type = 'error';
+          alertStore.alert.active = true;
+          alertStore.alert.title = 'Invalid Email';
+          alertStore.alert.message = 'Please enter a valid Email';
+          alertStore.alert.type = 'error';
 
           setTimeout(() => {
-            productsStore.alert.active = false;
-            productsStore.alert.title = '';
-            productsStore.alert.message = '';
-            productsStore.alert.type = '';
+            alertStore.alert.active = false;
+            alertStore.alert.title = '';
+            alertStore.alert.message = '';
+            alertStore.alert.type = '';
           }, 3000);
           return;
         }
@@ -38,9 +48,31 @@ export const useAuthStore = defineStore('auth', () => {
         localStorage.setItem('user', JSON.stringify(formData))
   
         router.push({name: 'control-panel'});
+    }
+
+    const register = async (formData) => {
+      try {
+        const {data} = await authServices.register(formData);
+
+        alertStore.alert.active = true;
+        alertStore.alert.title = 'Success';
+        alertStore.alert.message = data.msg;
+        alertStore.alert.type = 'success';
+
+        setTimeout(() => {
+          alertStore.alert.active = false;
+          alertStore.alert.title = '';
+          alertStore.alert.message = '';
+          alertStore.alert.type = '';
+        }, 3000);
+
+      } catch (error) {
+        console.log(error.response.data.msg); //Open axios error and get backend message
       }
+    }    
 
     return{
         login,
+        register
     }
 })

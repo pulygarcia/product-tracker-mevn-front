@@ -4,16 +4,18 @@
   import { formatCurrency } from '@/helpers';
   import Dialog from '../components/Dialog.vue'
   import Alert from '../components/Alert.vue'
+  import { useAlertStore } from '@/stores/alertStore';
 
   const productsStore = useProductsStore();
   const dialogStore = useDialogStore();
+  const alertStore = useAlertStore();
 
   const currentUser = JSON.parse(localStorage.getItem('user')).email;
 </script>
 
 <template>
     <main class="pa-3 w-100">
-      <Alert v-if="productsStore.alert.active" :title="productsStore.alert.title" :message="productsStore.alert.message" :type="productsStore.alert.type" class="my-5"/>
+      <Alert v-if="alertStore.alert.active" :title="alertStore.alert.title" :message="alertStore.alert.message" :type="alertStore.alert.type" class="my-5"/>
 
       <div class="d-flex flex-column flex-md-row justify-space-between align-md-center">
         <h1 class="mt-3">Control Panel</h1>

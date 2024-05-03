@@ -2,8 +2,10 @@
   import {ref} from 'vue';
   import { useProductsStore } from '@/stores/productsStore';
   import Alert from '../components/Alert.vue'
+  import { useAlertStore } from '@/stores/alertStore';
 
   const productsStore = useProductsStore();
+  const alertStore = useAlertStore();
 
   const formData = ref({
     name: '',
@@ -32,10 +34,10 @@
       <h1 class="mt-3">Add new Product</h1>
 
       <Alert 
-        v-if="productsStore.alert.active"
-        :title="productsStore.alert.title"
-        :message="productsStore.alert.message"
-        :type="productsStore.alert.type"
+        v-if="alertStore.alert.active"
+        :title="alertStore.alert.title"
+        :message="alertStore.alert.message"
+        :type="alertStore.alert.type"
         class="my-5"
       />
 
