@@ -11,6 +11,16 @@
       email: '',
       password: '',
     });
+
+    const createUser = async (user) => {
+      try {
+        await authStore.register(user);
+
+        formData.value = {};
+      } catch (error) {
+        console.log(error);
+      }
+    }
   </script>
 
 <template>
@@ -24,7 +34,7 @@
       
       <p class="text-subtitle-1 text-grey-darken-1">Create an account in order to get access to the control panel</p>
         
-        <v-form @submit.prevent="authStore.register(formData)" class="mt-6">
+        <v-form @submit.prevent="createUser(formData)" class="mt-6">
           <v-row class="justify-center flex-column align-center">
             <v-col
             cols="12"
