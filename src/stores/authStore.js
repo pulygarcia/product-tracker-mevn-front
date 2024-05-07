@@ -43,11 +43,6 @@ export const useAuthStore = defineStore('auth', () => {
           }, 3000);
           return;
         }
-  
-        //set user
-        localStorage.setItem('user', JSON.stringify(formData))
-  
-        router.push({name: 'control-panel'});
     }
 
     const register = async (formData) => {
@@ -67,12 +62,40 @@ export const useAuthStore = defineStore('auth', () => {
         }, 3000);
 
       } catch (error) {
-        console.log(error.response.data.msg); //Open axios error and get backend message
+        //Show backend message
+        alertStore.alert.active = true;
+        alertStore.alert.title = 'Error';
+        alertStore.alert.message = error.response.data.msg;
+        alertStore.alert.type = 'error';
+
+        setTimeout(() => {
+          alertStore.alert.active = false;
+          alertStore.alert.title = '';
+          alertStore.alert.message = '';
+          alertStore.alert.type = '';
+        }, 3000);
       }
-    }    
+    }
+    
+    const verifyAccount = async (token) => {
+      try {
+        const {data} = await authServices.verifyUser(token);
+
+        setTimeout(() => {
+          router.push({name: 'login'})
+        }, 3000);
+
+      } catch (error) {
+        alertStore.alert.active = true;
+        alertStore.alert.title = 'Error';
+        alertStore.alert.message = 'Verify your account was not possible: ' + error.response.data.msg;
+        alertStore.alert.type = 'error';
+      }
+    }
 
     return{
         login,
-        register
+        register,
+        verifyAccount
     }
 })
