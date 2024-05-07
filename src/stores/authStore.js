@@ -13,7 +13,7 @@ export const useAuthStore = defineStore('auth', () => {
         return regex.test(email);
     }
 
-    const login = (formData) => {
+    const login = async (formData) => {
         if(Object.values(formData).includes('')){
           alertStore.alert.active = true;
           alertStore.alert.title = 'Complete the fields';
@@ -42,6 +42,32 @@ export const useAuthStore = defineStore('auth', () => {
             alertStore.alert.type = '';
           }, 3000);
           return;
+        }
+
+        try {
+          const {data} = await authServices.login(formData);
+
+          /*Get the token given from the Api
+          console.log(data.token); */
+
+          localStorage.setItem('jwt', data.token);
+
+          setTimeout(() => {
+            router.push({name: 'control-panel'})
+          }, 1000);
+
+        } catch (error) {
+          alertStore.alert.active = true;
+          alertStore.alert.title = 'Error';
+          alertStore.alert.message = error.response.data.msg;
+          alertStore.alert.type = 'error';
+
+          setTimeout(() => {
+            alertStore.alert.active = false;
+            alertStore.alert.title = '';
+            alertStore.alert.message = '';
+            alertStore.alert.type = '';
+          }, 3000);
         }
     }
 

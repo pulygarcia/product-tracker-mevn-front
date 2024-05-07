@@ -1,5 +1,6 @@
 import { createRouter, createWebHistory } from 'vue-router'
 import HomeView from '../views/HomeView.vue'
+import authServices from '@/api/authServices'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -53,15 +54,19 @@ const router = createRouter({
 })
 
 //navigation guard
-router.beforeEach((to, from, next) => {
+router.beforeEach(async (to, from, next) => {
+  //send the token in headers of the request so that can validate the json web token
   if(to.meta.requiresAuth){
-    //check if there is something
-    const user = localStorage.getItem('user');
-    if(!user){
-      next({name: 'login'})
-    }else{
+    try {
+      await authServices.auth();
+      //authenticated correctly
       next();
+
+    } catch (error) {
+      //error veirfying the token, redirect
+      next({name: 'login'})
     }
+
   }else{
     //allow navigation
     next();
