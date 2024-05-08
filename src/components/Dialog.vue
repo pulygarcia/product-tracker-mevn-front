@@ -30,25 +30,43 @@
 </script>
 
 <template>
-    <v-card
-        position="absolute"
-        min-width="350"
-        location="center"
-        class="bg-grey-darken-4 pa-2 w-md-30"
-        elevation="15"
+
+    <v-dialog
+        v-model="dialogStore.isOpenDialog"
+        width="400"
         :class="isOpen == false ? 'd-none' : ''"
     >
-        <v-card-text>
-            <p class="my-2 text-uppercase font-weight-bold text-h5">{{ product.name }}</p>
-            <p class="mt-3 text-blue-darken-2 font-weight-black text-h6">USD{{ formatCurrency(product.price) }}</p>
-            <p class="mt-3 text-subtitle-1">Brand: {{ product.brand }}</p>
-            <p class="mt-3 text-subtitle-1">Category: {{ product.category }}</p>
+      <v-card
+        max-width="600"
+        class="pa-4"
+      >
 
-            <p class="mt-3 text-subtitle-1">Stock: <span :class="product.quantity > 1 ? 'text-green-darken-1' : 'text-red-darken-1'" class="font-weight-bold">{{ product.quantity }}</span></p>
+      <v-card-title>
+        {{product.name}}
+      </v-card-title>
 
-            <p class="mt-3 text-subtitle-1">ID: {{ product._id }}</p>
-        </v-card-text>
-    
+      <v-card-subtitle>
+        <span class="me-1">{{ product.brand }}</span>
+
+        <v-icon
+          color="error"
+          icon="mdi-check-decagram"
+          size="small"
+        ></v-icon>
+      </v-card-subtitle>
+
+      <div class="mt-3 text-subtitle-1 ps-4">
+        {{product.category}}
+      </div>
+      
+      <p class="mt-3 text-subtitle-1 ps-4">Stock: <span :class="product.quantity > 1 ? 'text-green-darken-1' : 'text-red-darken-1'" class="font-weight-bold">{{ product.quantity }}</span></p>
+      
+      <p class="mt-3 text-subtitle-1 ps-4">ID: {{ product._id }}</p>
+      
+      <v-divider class="mx-4 mt-2"></v-divider>
+
+      <p class="mt-3 text-blue-darken-2 font-weight-black text-subtitle-1 ps-4">USD{{ formatCurrency(product.price) }}</p>
+
         <v-card-actions>
             <v-spacer></v-spacer>
     
@@ -74,7 +92,8 @@
             </div>
 
         </v-card-actions>
-        </v-card>
+      </v-card>
+    </v-dialog>
 </template>
 
 <style>
