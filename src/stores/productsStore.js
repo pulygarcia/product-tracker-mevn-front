@@ -86,7 +86,6 @@ export const useProductsStore = defineStore('products', () => {
                 alertStore.alert.message = '';
                 alertStore.alert.type = '';
                 alertStore.alert.active = false;
-                router.push({name: 'home'});
             }, 3000);
     
         } catch (error) {

@@ -1,5 +1,4 @@
 <script setup>
-  import { onMounted } from 'vue';
   import {formatCurrency} from '../helpers/index.js'
   import { useProductsStore } from '@/stores/productsStore';
 
@@ -9,7 +8,7 @@
 
 <template>
 
-  <main class="pa-3 w-100">
+  <main class="pa-3 w-100 scroll">
     <h1 class="mt-3">Products</h1>
 
     <div class="mt-5 w-50">
@@ -66,3 +65,20 @@
   </v-table>
   </main>
 </template>
+<style>
+  .scroll{
+    overflow-y: scroll;
+  }
+  .scroll::-webkit-scrollbar {
+  width: 12px;
+}
+
+.scroll::-webkit-scrollbar-track {
+  background-color: transparent;
+}
+
+.scroll::-webkit-scrollbar-thumb {
+  background-color: #888;
+  border-radius: 6px;
+}
+</style>

@@ -14,7 +14,7 @@
 </script>
 
 <template>
-    <main class="pa-3 w-100">
+    <main class="pa-3 w-100 scroll">
       <Alert v-if="alertStore.alert.active" :title="alertStore.alert.title" :message="alertStore.alert.message" :type="alertStore.alert.type" class="my-5"/>
 
       <div class="d-flex flex-column flex-md-row justify-space-between align-md-center">

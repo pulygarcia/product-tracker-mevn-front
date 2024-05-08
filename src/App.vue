@@ -11,6 +11,8 @@ import SideBar from './components/Sidebar.vue'
   </div>
 </template>
 
-<style scoped>
-  
+<style>
+  .sb-none{
+    scrollbar-width: none;
+  }
 </style>
