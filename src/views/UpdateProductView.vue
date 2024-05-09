@@ -61,14 +61,12 @@
           alertStore.alert.message = '';
           alertStore.alert.type = '';
           alertStore.alert.active = false;
-          //redirect
-          router.push({name: 'control-panel'})
       }, 3000);
 
-      // Reset form data visually
-      Object.keys(formData).forEach(key => {
-        formData[key] = '';
-      });
+      // // Reset form data visually
+      // Object.keys(formData).forEach(key => {
+      //   formData[key] = '';
+      // });
 
       //refresh product list
       const {data} = await apiServices.getAllProducts();
