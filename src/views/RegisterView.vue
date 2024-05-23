@@ -10,11 +10,29 @@
     const formData = ref({
       email: '',
       password: '',
+      repeatPassword: ''
     });
 
     const createUser = async (user) => {
+      if(user.repeatPassword !== user.password){
+        alertStore.alert.active = true;
+        alertStore.alert.title = 'Error';
+        alertStore.alert.message = 'Passwords are different, please check the fields';
+        alertStore.alert.type = 'error';
+
+        setTimeout(() => {
+            alertStore.alert.active = false;
+            alertStore.alert.title = '';
+            alertStore.alert.message = '';
+            alertStore.alert.type = '';
+          }, 3000);
+          
+        return;
+      }
+
       try {
-        await authStore.register(user);
+        const { repeatPassword, ...userData } = user; //removing repeat password field before sending the object to the function
+        await authStore.register(userData);
 
         formData.value = {};
       } catch (error) {
@@ -53,6 +71,17 @@
             <v-text-field
             v-model="formData.password"
             label="Password"
+            required
+            type="password"
+            ></v-text-field>
+          </v-col>
+
+            <v-col
+            cols="12"
+            >
+            <v-text-field
+            v-model="formData.repeatPassword"
+            label="Repeat password"
             required
             type="password"
             ></v-text-field>
